@@ -1,0 +1,206 @@
+/* ================================================================
+   KIRANA BASKET — store.css
+   Customer-facing storefront styles (index.html)
+   ================================================================ */
+
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Poppins',sans-serif;background:#fff;max-width:480px;margin:0 auto;overflow-x:hidden;}
+
+/* ══════════════════════════════
+   LANDING PAGE – Blinkit Style
+══════════════════════════════ */
+
+/* ── TOP NAV ── */
+.top-nav{
+  background:#0c831f;
+  padding:0 16px;
+  height:56px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  position:sticky;
+  top:0;
+  z-index:100;
+}
+.nav-logo{display:flex;align-items:center;gap:8px;}
+.nav-logo-icon{width:36px;height:36px;background:#ffe000;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:#0c831f;flex-shrink:0;}
+.nav-logo-text{font-size:18px;font-weight:900;color:#fff;letter-spacing:-.3px;}
+
+/* ── HERO ── */
+.hero{background:#0c831f;padding:28px 20px 36px;position:relative;overflow:hidden;}
+.hero-location{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.15);border-radius:20px;padding:5px 12px;margin-bottom:18px;}
+.hero-location span{font-size:11px;font-weight:700;color:#ffe000;}
+.hero-content{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;}
+.hero-text{flex:1;}
+.hero-title{font-size:28px;font-weight:900;color:#fff;line-height:1.15;letter-spacing:-.5px;margin-bottom:6px;}
+.hero-title .yellow{color:#ffe000;}
+.hero-sub{font-size:13px;color:rgba(255,255,255,.85);line-height:1.5;margin-bottom:20px;}
+.hero-cta{background:#ffe000;color:#0c831f;border:none;border-radius:12px;padding:12px 22px;font-size:14px;font-weight:800;cursor:pointer;font-family:'Poppins',sans-serif;display:inline-flex;align-items:center;gap:6px;}
+.hero-img-wrap{width:100px;flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:6px;position:relative;}
+.hero-basket{font-size:72px;line-height:1;filter:drop-shadow(0 8px 20px rgba(0,0,0,.2));}
+.hero-badge{background:#ffe000;border-radius:10px;padding:4px 10px;font-size:10px;font-weight:800;color:#0c831f;white-space:nowrap;}
+.hero::before{content:'';position:absolute;top:-80px;right:-80px;width:220px;height:220px;background:rgba(255,255,255,.06);border-radius:50%;}
+.hero::after{content:'';position:absolute;bottom:-100px;left:-60px;width:280px;height:280px;background:rgba(255,255,255,.04);border-radius:50%;}
+
+/* ── DELIVERY STRIP ── */
+.deliv-strip{background:#ffe000;padding:10px 16px;display:flex;align-items:center;justify-content:space-between;}
+.deliv-strip-left{display:flex;align-items:center;gap:8px;}
+.deliv-strip-icon{font-size:22px;}
+.deliv-strip-text strong{font-size:13px;font-weight:800;color:#111;display:block;line-height:1.2;}
+.deliv-strip-text span{font-size:10px;color:#555;font-weight:500;}
+.deliv-strip-pills{display:flex;gap:6px;}
+.ds-pill{background:#0c831f;color:#fff;border-radius:20px;padding:4px 10px;font-size:10px;font-weight:700;white-space:nowrap;}
+
+/* ── PIN SECTION ── */
+.pin-section{padding:20px 16px;background:#fff;}
+.pin-label{font-size:13px;font-weight:800;color:#111;margin-bottom:4px;display:flex;align-items:center;gap:6px;}
+.pin-hint-text{font-size:11px;color:#888;margin-bottom:14px;}
+.pin-input-row{display:flex;gap:8px;align-items:stretch;}
+.pin-input-wrap{flex:1;position:relative;display:flex;align-items:center;}
+.pin-input-wrap .pin-flag{position:absolute;left:12px;font-size:18px;pointer-events:none;}
+#pin-inp{
+  width:100%;border:2px solid #e8e8e8;border-radius:12px;
+  padding:13px 14px 13px 40px;font-size:18px;letter-spacing:6px;font-weight:800;
+  outline:none;font-family:'Poppins',sans-serif;transition:border-color .2s;
+  background:#f8f8f8;color:#111;
+}
+#pin-inp:focus{border-color:#0c831f;background:#fff;}
+#pin-inp.valid{border-color:#0c831f;background:#f0faf0;}
+#pin-btn{
+  background:#ccc;color:#fff;border:none;border-radius:12px;
+  padding:0 20px;font-size:14px;font-weight:800;cursor:default;
+  font-family:'Poppins',sans-serif;transition:all .2s;white-space:nowrap;min-width:90px;
+}
+#pin-btn.active{background:#0c831f;cursor:pointer;}
+#pin-err{font-size:11px;color:#e53935;margin-top:8px;font-weight:600;min-height:16px;}
+
+/* ── LOADING OVERLAY ── */
+#loading-overlay{
+  display:none;position:fixed;inset:0;z-index:999;
+  background:rgba(12,131,31,.92);
+  flex-direction:column;align-items:center;justify-content:center;gap:16px;
+}
+.spin{width:40px;height:40px;border:4px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .8s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ── HOW IT WORKS ── */
+.how-section{background:#f8f9f5;padding:24px 16px;border-top:1px solid #eee;}
+.how-title{font-size:15px;font-weight:800;color:#111;margin-bottom:16px;text-align:center;}
+.how-steps{display:flex;gap:0;align-items:flex-start;}
+.how-step{flex:1;text-align:center;padding:0 6px;position:relative;}
+.how-step:not(:last-child)::after{content:'→';position:absolute;right:-8px;top:18px;font-size:16px;color:#ccc;font-weight:700;}
+.step-circle{width:46px;height:46px;background:#0c831f;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;margin:0 auto 8px;}
+.step-num{font-size:10px;font-weight:800;color:#0c831f;margin-bottom:4px;}
+.step-lbl{font-size:10px;font-weight:600;color:#555;line-height:1.3;}
+
+/* ── CATEGORIES ── */
+.cats-section{padding:20px 16px;}
+.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+.section-header h2{font-size:15px;font-weight:800;color:#111;}
+.section-header span{font-size:11px;color:#0c831f;font-weight:600;}
+.cats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
+.cat-tile{background:#f8f9f5;border-radius:14px;padding:12px 6px;text-align:center;border:1.5px solid #eef0eb;cursor:pointer;transition:all .15s;}
+.cat-tile:active{transform:scale(.96);}
+.cat-tile .ce{font-size:24px;display:block;margin-bottom:4px;}
+.cat-tile .cl{font-size:9px;font-weight:700;color:#555;line-height:1.2;}
+
+/* ── OFFERS ── */
+.offers-section{padding:0 16px 20px;}
+.offers-scroll{display:flex;gap:10px;overflow-x:auto;scrollbar-width:none;padding-bottom:4px;}
+.offer-card{flex-shrink:0;width:200px;border-radius:16px;padding:16px;position:relative;overflow:hidden;}
+.offer-card h3{font-size:16px;font-weight:900;color:#fff;margin-bottom:3px;}
+.offer-card p{font-size:11px;color:rgba(255,255,255,.88);margin-bottom:12px;line-height:1.4;}
+.offer-btn{background:rgba(255,255,255,.2);border:1.5px solid rgba(255,255,255,.5);border-radius:20px;padding:5px 14px;font-size:11px;font-weight:700;color:#fff;cursor:pointer;font-family:'Poppins',sans-serif;}
+.offer-emoji{position:absolute;right:10px;bottom:8px;font-size:44px;opacity:.28;}
+
+/* ── TRUST ── */
+.trust-section{margin:0 16px 20px;background:#f8f9f5;border-radius:16px;overflow:hidden;border:1.5px solid #eef0eb;}
+.trust-row{display:flex;}
+.trust-item{flex:1;padding:14px 6px;text-align:center;border-right:1.5px solid #eef0eb;}
+.trust-item:last-child{border-right:none;}
+.trust-item .ti{font-size:22px;display:block;margin-bottom:4px;}
+.trust-item .tl{font-size:9px;font-weight:700;color:#555;line-height:1.3;}
+
+/* ── BRANDS ── */
+.brands-section{padding:0 16px 20px;}
+.brands-row{display:flex;gap:10px;align-items:center;overflow-x:auto;scrollbar-width:none;}
+.brand-chip{flex-shrink:0;background:#f8f9f5;border-radius:10px;padding:8px 14px;font-size:11px;font-weight:700;color:#555;border:1.5px solid #eef0eb;white-space:nowrap;}
+
+/* ── FOOTER ── */
+.land-footer{background:#0c831f;padding:24px 20px;text-align:center;}
+.footer-logo{font-size:22px;font-weight:900;color:#fff;margin-bottom:4px;}
+.footer-addr{font-size:11px;color:rgba(255,255,255,.75);line-height:1.6;margin-bottom:12px;}
+.footer-copy{font-size:10px;color:rgba(255,255,255,.4);margin-top:14px;}
+
+/* ══════════════════════════════
+   MAIN STORE APP
+══════════════════════════════ */
+.app{max-width:480px;margin:0 auto;min-height:100vh;background:#fff;position:relative;}
+.hdr-top{background:#0c831f;padding:12px 16px;display:flex;align-items:center;gap:8px;}
+.hdr-name{flex:1;}
+.hdr-name h1{font-size:18px;font-weight:900;color:#fff;letter-spacing:-.3px;line-height:1;}
+.hdr-name p{font-size:11px;color:rgba(255,255,255,.8);margin-top:2px;}
+.hdr-btn{background:rgba(255,255,255,.18);border:none;border-radius:10px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;font-size:15px;cursor:pointer;position:relative;flex-shrink:0;}
+.hdr-cart-btn{background:#fff;border:none;border-radius:12px;padding:8px 14px;display:flex;align-items:center;gap:6px;font-weight:800;font-size:14px;color:#0c831f;cursor:pointer;flex-shrink:0;}
+.search-bar{padding:10px 14px;background:#fff;}
+.search-inner{background:#f4f5f1;border-radius:12px;display:flex;align-items:center;gap:8px;padding:10px 14px;}
+.search-inner input{border:none;flex:1;font-size:13px;background:transparent;outline:none;color:#333;font-family:'Poppins',sans-serif;}
+.banner-wrap{position:relative;overflow:hidden;height:76px;}
+.coupon-strip{display:flex;gap:8px;overflow-x:auto;padding:8px 14px;scrollbar-width:none;background:#fff;}
+.c-chip{background:#f0faf0;border:1.5px dashed #0c831f;border-radius:20px;padding:4px 13px;font-size:11px;font-weight:700;color:#0c831f;white-space:nowrap;flex-shrink:0;}
+.cat-row{display:flex;gap:8px;overflow-x:auto;padding:10px 14px 8px;scrollbar-width:none;border-bottom:1px solid #f0f0f0;}
+.cat-btn{display:flex;flex-direction:column;align-items:center;gap:3px;background:#f8f8f8;border:2px solid transparent;border-radius:14px;padding:8px 10px;cursor:pointer;flex-shrink:0;min-width:58px;font-family:'Poppins',sans-serif;transition:all .15s;}
+.cat-btn.active{background:#f0faf0;border-color:#0c831f;}
+.cat-btn .ce{font-size:20px;}
+.cat-btn .cl{font-size:9px;font-weight:600;white-space:nowrap;color:#666;}
+.cat-btn.active .cl{color:#0c831f;font-weight:800;}
+.sort-bar{display:flex;align-items:center;gap:8px;padding:6px 14px 8px;background:#fff;}
+.sort-bar select{border:1px solid #eee;border-radius:8px;padding:4px 8px;font-size:11px;background:#fff;outline:none;cursor:pointer;font-family:'Poppins',sans-serif;color:#555;}
+.prod-card{background:#fff;border-radius:14px;border:1px solid #eff0eb;display:flex;flex-direction:column;position:relative;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.04);}
+.prod-img{height:96px;background:#f8f9f5;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+.prod-body{padding:10px 10px 12px;display:flex;flex-direction:column;gap:2px;flex:1;}
+.prod-name{font-size:12px;font-weight:700;line-height:1.35;min-height:32px;color:#111;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.prod-brand{font-size:10px;color:#bbb;font-weight:500;}
+.var-pills{display:flex;gap:4px;flex-wrap:wrap;margin:4px 0 2px;}
+.var-pill{border:1.5px solid #e0e0e0;border-radius:16px;padding:2px 7px;font-size:9px;font-weight:700;color:#666;cursor:pointer;background:#fff;white-space:nowrap;transition:all .15s;font-family:'Poppins',sans-serif;}
+.var-pill.sel{border-color:#0c831f;background:#f0faf0;color:#0c831f;}
+.price-row{display:flex;align-items:baseline;gap:5px;margin-top:auto;padding-top:4px;}
+.price-now{font-size:15px;font-weight:900;color:#111;}
+.price-mrp{font-size:10px;color:#ccc;text-decoration:line-through;}
+.add-btn{width:100%;background:#fff;border:1.5px solid #0c831f;color:#0c831f;border-radius:8px;padding:7px 0;font-weight:800;font-size:13px;cursor:pointer;margin-top:5px;font-family:'Poppins',sans-serif;transition:all .15s;}
+.add-btn:active{background:#0c831f;color:#fff;}
+.oos-btn{width:100%;background:#f5f5f5;border:none;border-radius:8px;padding:7px;font-size:11px;font-weight:700;color:#bbb;margin-top:5px;cursor:default;}
+.qty-ctrl{display:flex;align-items:center;justify-content:space-between;background:#0c831f;border-radius:8px;margin-top:5px;}
+.qty-ctrl button{background:none;border:none;color:#fff;font-size:20px;font-weight:700;padding:5px 12px;line-height:1;cursor:pointer;}
+.qty-ctrl span{color:#fff;font-weight:800;font-size:14px;min-width:26px;text-align:center;}
+.badge{position:absolute;font-size:9px;font-weight:800;border-radius:6px;padding:2px 7px;z-index:1;color:#fff;}
+.badge-disc{top:8px;left:8px;background:#256fef;}
+.badge-FRESH{background:#22a045;}
+.badge-POPULAR{background:#ff8c00;}
+.badge-SALE{background:#e53935;}
+.wish-btn{position:absolute;top:6px;right:6px;background:rgba(255,255,255,.92);border:none;border-radius:50%;width:26px;height:26px;font-size:13px;display:flex;align-items:center;justify-content:center;z-index:2;box-shadow:0 1px 4px rgba(0,0,0,.12);cursor:pointer;}
+.sec-label{font-size:13px;font-weight:800;color:#111;margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+.sec-label::after{content:'';flex:1;height:1.5px;background:#f0f0f0;border-radius:2px;}
+#cart-bar{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:#0c831f;color:#fff;padding:14px 20px;display:none;justify-content:space-between;align-items:center;z-index:300;box-shadow:0 -4px 20px rgba(12,131,31,.35);cursor:pointer;}
+.overlay{position:fixed;inset:0;z-index:400;background:rgba(0,0,0,.55);display:flex;align-items:flex-end;justify-content:center;}
+.sheet{width:100%;max-width:480px;background:#f8f9f5;border-radius:20px 20px 0 0;max-height:93vh;overflow-y:auto;flex-shrink:0;animation:slideUp .3s ease;}
+.modal-center{position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;padding:16px;}
+.card{background:#fff;border-radius:14px;padding:14px;border:1px solid #eee;margin-bottom:10px;}
+.inp{width:100%;border:1.5px solid #eee;border-radius:10px;padding:10px 13px;font-size:13px;outline:none;transition:border-color .2s;font-family:'Poppins',sans-serif;}
+.inp:focus{border-color:#0c831f;}
+.deliv-opt{flex:1;border:2px solid #eee;background:#fff;border-radius:12px;padding:10px 5px;cursor:pointer;text-align:center;transition:all .2s;font-family:'Poppins',sans-serif;}
+.deliv-opt.sel{border-color:#0c831f;background:#f0faf0;}
+.deliv-opt .doi{font-size:20px;display:block;margin-bottom:3px;}
+.deliv-opt .dot{font-size:11px;font-weight:800;color:#555;transition:color .2s;}
+.deliv-opt.sel .dot{color:#0c831f;}
+.deliv-opt .dos{font-size:9px;color:#aaa;margin-top:2px;}
+.receipt-row{display:flex;justify-content:space-between;align-items:flex-start;font-size:12px;padding:5px 0;color:#555;}
+.receipt-total{display:flex;justify-content:space-between;font-size:16px;font-weight:900;padding-top:10px;margin-top:6px;border-top:2px solid #0c831f;color:#0c831f;}
+.toast{position:fixed;top:78px;left:50%;transform:translateX(-50%);background:#0c831f;color:#fff;border-radius:14px;padding:12px 22px;font-weight:700;font-size:13px;z-index:900;box-shadow:0 8px 28px rgba(0,0,0,.2);white-space:nowrap;pointer-events:none;display:none;}
+
+@keyframes fadeIn{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:scale(1)}}
+@keyframes slideUp{from{transform:translateY(100%);opacity:0}to{transform:translateY(0);opacity:1}}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+@keyframes toast-ani{0%{opacity:0;transform:translateX(-50%) translateY(-10px)}15%{opacity:1;transform:translateX(-50%) translateY(0)}80%{opacity:1}100%{opacity:0}}
+
+@keyframes spin{to{transform:rotate(360deg)}}
