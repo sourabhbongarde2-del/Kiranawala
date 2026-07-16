@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"/>
+<title>Naya Store Register Karo</title>
+<meta name="theme-color" content="#0c831f"/>
+<link rel="icon" href="assets/icons/icon-192.png"/>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="css/register.css"/>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="hd">
+    <div class="ic">🏪</div>
+    <h1>Apni Dukan Online Le Jao</h1>
+    <p>2 minute mein apna khud ka online kirana store banao</p>
+  </div>
+
+  <div class="card" id="form-card">
+    <div id="reg-err" class="err"></div>
+
+    <div class="fld">
+      <label>Dukan / Store Ka Naam *</label>
+      <input id="r-name" placeholder="e.g. Sharma Kirana Store"/>
+    </div>
+
+    <div class="fld">
+      <label>Malik Ka Naam (Owner) *</label>
+      <input id="r-owner" placeholder="e.g. Ramesh Sharma"/>
+    </div>
+
+    <div class="row2">
+      <div class="fld">
+        <label>Mobile Number *</label>
+        <input id="r-mobile" inputmode="numeric" maxlength="10" placeholder="9876543210"/>
+      </div>
+      <div class="fld">
+        <label>WhatsApp Number</label>
+        <input id="r-wa" inputmode="numeric" maxlength="10" placeholder="Same as mobile"/>
+      </div>
+    </div>
+
+    <div class="fld">
+      <label>Dukan Ka Address *</label>
+      <input id="r-addr" placeholder="e.g. Main Road, Belewadi Masa"/>
+    </div>
+
+    <div class="row2">
+      <div class="fld">
+        <label>Delivery Area PIN Code *</label>
+        <input id="r-pin" inputmode="numeric" maxlength="6" placeholder="416218"/>
+      </div>
+      <div class="fld">
+        <label>City / Area</label>
+        <input id="r-city" placeholder="e.g. Kolhapur"/>
+      </div>
+    </div>
+
+    <div class="fld">
+      <label>Dukan Ki Location *</label>
+      <button type="button" id="loc-btn" onclick="captureLocation()" style="width:100%;background:#f0faf0;border:1.5px solid #0c831f;color:#0c831f;border-radius:10px;padding:12px;font-weight:700;font-size:13px;cursor:pointer;font-family:'Poppins',sans-serif">
+        📍 Dukan Mein Khade Hoke "Location Lo" Dabao
+      </button>
+      <div class="hint" id="loc-status">Isse customers ko pata chalega ki tumhari dukan unke 3km ke andar hai ya nahi.</div>
+    </div>
+
+    <div class="fld">
+      <label>Admin Password Banao *</label>
+      <input id="r-pass" type="password" placeholder="Kam se kam 6 characters"/>
+      <div class="hint">Yeh password apna admin panel kholne ke liye chahiye — yaad rakho!</div>
+    </div>
+
+    <div class="fld">
+      <label>Password Dobara Likho *</label>
+      <input id="r-pass2" type="password" placeholder="Confirm password"/>
+    </div>
+
+    <button class="btn" id="reg-btn" onclick="submitReg()">🚀 Mera Store Banao</button>
+  </div>
+
+  <!-- SUCCESS SCREEN -->
+  <div class="card succ" id="succ-card">
+    <div class="tick">🎉</div>
+    <h2 id="succ-name">Store Ban Gaya!</h2>
+    <div class="sub">Ab yeh 2 links save kar lo</div>
+
+    <div class="link-box">
+      <div class="lbl">📲 Customer Link (Grahakon ko bhejo)</div>
+      <div class="url" id="cust-link"></div>
+      <div class="link-actions">
+        <button class="mini-btn" onclick="copyLink('cust-link')">📋 Copy</button>
+        <button class="mini-btn wa" onclick="shareWA()">📲 WhatsApp Share</button>
+      </div>
+    </div>
+
+    <div class="link-box" style="text-align:center">
+      <div class="lbl">📷 QR Code (Print karke dukan mein lagao)</div>
+      <div id="qr-box" style="display:flex;justify-content:center;padding:10px 0"></div>
+      <div class="link-actions">
+        <button class="mini-btn" onclick="downloadQR()">⬇️ QR Download Karo</button>
+      </div>
+    </div>
+
+    <div class="link-box">
+      <div class="lbl">⚙️ Admin Link (Sirf tumhare liye)</div>
+      <div class="url" id="adm-link"></div>
+      <div class="link-actions">
+        <button class="mini-btn" onclick="copyLink('adm-link')">📋 Copy</button>
+        <button class="mini-btn" onclick="openAdmin()">Kholo →</button>
+      </div>
+    </div>
+
+    <div class="warn-box">
+      ⚠️ Admin password kahin likh ke rakho — yeh dobara nahi dikhega. Customer link customers ko WhatsApp/Facebook pe bhej sakte ho — wahi link unke phone pe app jaisa install bhi ho jayega (Add to Home Screen).
+    </div>
+  </div>
+
+  <a href="index.html" class="back">← Demo dekhna hai? Yahan click karo</a>
+  <a href="nearby.html" class="back">📍 Apne aas-paas ki dukane dekho</a>
+
+  <div style="text-align:center;margin-top:22px;font-size:10px;color:rgba(255,255,255,.55)">
+    Developed by <strong style="color:rgba(255,255,255,.8)">Sourabh Bongarde Software Solutions Pvt Ltd</strong>
+  </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="js/core/config.js"></script>
+<script src="js/core/Db.js"></script>
+<script src="js/register/register.js"></script>
+</body>
+</html>

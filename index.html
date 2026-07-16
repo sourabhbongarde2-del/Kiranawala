@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"/>
+<meta name="theme-color" content="#0c831f"/>
+<title id="page-title">Grocery Store</title>
+<link id="apple-icon" rel="apple-touch-icon" href="assets/icons/icon-192.png"/>
+<link rel="icon" href="assets/icons/icon-192.png"/>
+<link id="manifest-link" rel="manifest" href="manifest.json"/>
+<meta name="mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="Kirana Basket"/>
+<meta name="description" content="Order groceries online with fast home delivery."/>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="css/store.css"/>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════
+     LOADING OVERLAY (shown during storeInit)
+═══════════════════════════════════════ -->
+<div id="loading-overlay" style="display:none;position:fixed;inset:0;z-index:999;background:rgba(12,131,31,.95);flex-direction:column;align-items:center;justify-content:center;gap:16px;">
+  <div style="font-size:48px">🛒</div>
+  <div style="width:40px;height:40px;border:4px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .8s linear infinite"></div>
+  <div style="font-size:14px;font-weight:700;color:#fff" id="loading-text">Loading...</div>
+  <div style="font-size:11px;color:rgba(255,255,255,.7)" id="loading-status">Starting...</div>
+  <button id="skip-load-btn" onclick="forceSkipLoad()" style="display:none;background:#ffe000;color:#0c831f;border:none;border-radius:10px;padding:10px 20px;font-weight:800;font-size:13px;cursor:pointer;font-family:'Poppins',sans-serif;margin-top:8px">
+    ⏭ Aage Badho (Skip)
+  </button>
+</div>
+
+<!-- ═══════════════════════════════════════
+     LANDING PAGE
+═══════════════════════════════════════ -->
+<div id="landing">
+  <!-- Top Nav -->
+  <nav class="top-nav">
+    <div class="nav-logo">
+      <div class="nav-logo-icon" id="nav-logo-ic">B</div>
+      <span class="nav-logo-text" id="nav-logo-txt">Grocery Store</span>
+    </div>
+    <a href="nearby.html" style="font-size:11px;font-weight:700;color:#fff;background:rgba(255,255,255,.18);border-radius:20px;padding:6px 12px;text-decoration:none;white-space:nowrap">📍 Nearby Stores</a>
+  </nav>
+
+  <!-- Hero -->
+  <div class="hero">
+    <div class="hero-location">
+      <span id="hero-loc">📍 Loading...</span>
+    </div>
+    <div class="hero-content">
+      <div class="hero-text">
+        <h1 class="hero-title">Grocery<br>delivered in<br><span class="yellow">hours!</span></h1>
+        <p class="hero-sub" id="hero-sub-txt">Fresh kirana items at best<br>prices. Order on WhatsApp.</p>
+        <button class="hero-cta" onclick="scrollToPin()">🛒 Order Now</button>
+      </div>
+      <div class="hero-img-wrap">
+        <div class="hero-basket">🛒</div>
+        <div class="hero-badge" id="hero-badge-txt">Local Store!</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delivery Strip -->
+  <div class="deliv-strip">
+    <div class="deliv-strip-left">
+      <span class="deliv-strip-icon">🚚</span>
+      <div class="deliv-strip-text">
+        <strong>Multiple Delivery Options</strong>
+        <span>Home · Instant · Self Pickup</span>
+      </div>
+    </div>
+    <div class="deliv-strip-pills">
+      <span class="ds-pill">Free ₹500+</span>
+      <span class="ds-pill">COD ✓</span>
+    </div>
+  </div>
+
+  <!-- PIN Section -->
+  <div class="pin-section">
+    <p class="pin-label">📍 Apna area check karo</p>
+    <p class="pin-hint-text" id="pin-hint">We deliver to your area</p>
+
+    <button id="auto-loc-btn" onclick="autoDetectLocation()" style="width:100%;background:#0c831f;color:#fff;border:none;border-radius:12px;padding:13px;font-weight:800;font-size:14px;cursor:pointer;font-family:'Poppins',sans-serif;display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:12px;">
+      📍 Meri Location Se Pata Karo
+    </button>
+    <div id="auto-loc-status" style="text-align:center;font-size:11px;color:rgba(255,255,255,.8);margin-bottom:12px;min-height:14px;"></div>
+
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+      <div style="flex:1;height:1px;background:rgba(255,255,255,.25);"></div>
+      <span style="font-size:11px;color:rgba(255,255,255,.6);">ya PIN daalo</span>
+      <div style="flex:1;height:1px;background:rgba(255,255,255,.25);"></div>
+    </div>
+
+    <div class="pin-input-row">
+      <div class="pin-input-wrap">
+        <span class="pin-flag">📍</span>
+        <input id="pin-inp" maxlength="6" inputmode="numeric" placeholder="416218"/>
+      </div>
+      <button id="pin-btn" onclick="checkPin()">Check →</button>
+    </div>
+    <div id="pin-err"></div>
+  </div>
+
+  <!-- How It Works -->
+  <div class="how-section">
+    <h3 class="how-title">How it works</h3>
+    <div class="how-steps">
+      <div class="how-step"><div class="step-circle">📍</div><div class="step-num">Step 1</div><div class="step-lbl">Enter your PIN code</div></div>
+      <div class="how-step"><div class="step-circle">🛒</div><div class="step-num">Step 2</div><div class="step-lbl">Add items to cart</div></div>
+      <div class="how-step"><div class="step-circle">📲</div><div class="step-num">Step 3</div><div class="step-lbl">Order on WhatsApp</div></div>
+      <div class="how-step"><div class="step-circle">🎉</div><div class="step-num">Step 4</div><div class="step-lbl">Get delivery!</div></div>
+    </div>
+  </div>
+
+  <!-- Categories -->
+  <div class="cats-section">
+    <div class="section-header"><h2>🛍️ Shop by Category</h2><span>50+ items</span></div>
+    <div class="cats-grid">
+      <div class="cat-tile"><span class="ce">🥛</span><span class="cl">Dairy &amp;<br>Eggs</span></div>
+      <div class="cat-tile"><span class="ce">🌾</span><span class="cl">Atta &amp;<br>Dal</span></div>
+      <div class="cat-tile"><span class="ce">🫙</span><span class="cl">Oils &amp;<br>Ghee</span></div>
+      <div class="cat-tile"><span class="ce">🌶️</span><span class="cl">Spices &amp;<br>Masala</span></div>
+      <div class="cat-tile"><span class="ce">🍪</span><span class="cl">Snacks &amp;<br>Biscuits</span></div>
+      <div class="cat-tile"><span class="ce">🥤</span><span class="cl">Cold<br>Drinks</span></div>
+      <div class="cat-tile"><span class="ce">🧹</span><span class="cl">Household<br>Items</span></div>
+      <div class="cat-tile"><span class="ce">🧴</span><span class="cl">Personal<br>Care</span></div>
+    </div>
+  </div>
+
+  <!-- Offers -->
+  <div class="offers-section">
+    <div class="section-header"><h2>🏷️ Today's Offers</h2></div>
+    <div class="offers-scroll">
+      <div class="offer-card" style="background:linear-gradient(135deg,#0c831f,#056b16)">
+        <h3>FIRST50</h3><p>₹50 off on your very first order!</p>
+        <button class="offer-btn" onclick="scrollToPin()">Shop Now →</button>
+        <div class="offer-emoji">🎉</div>
+      </div>
+      <div class="offer-card" style="background:linear-gradient(135deg,#f59e0b,#d97706)">
+        <h3>SAVE10</h3><p>Flat 10% off on any order!</p>
+        <button class="offer-btn" onclick="scrollToPin()">Use Now →</button>
+        <div class="offer-emoji">🏷️</div>
+      </div>
+      <div class="offer-card" style="background:linear-gradient(135deg,#7c3aed,#5b21b6)">
+        <h3>Free Delivery</h3><p>Free home delivery on orders above ₹500!</p>
+        <button class="offer-btn" onclick="scrollToPin()">Order Now →</button>
+        <div class="offer-emoji">🚚</div>
+      </div>
+      <div class="offer-card" style="background:linear-gradient(135deg,#e53935,#b71c1c)">
+        <h3>⚡ Instant</h3><p>Groceries in ~2 hours. Only ₹20 extra!</p>
+        <button class="offer-btn" onclick="scrollToPin()">Try Now →</button>
+        <div class="offer-emoji">⚡</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Trust -->
+  <div class="trust-section">
+    <div class="trust-row">
+      <div class="trust-item"><span class="ti">🌿</span><span class="tl">Fresh<br>Products</span></div>
+      <div class="trust-item"><span class="ti">✅</span><span class="tl">Best<br>Prices</span></div>
+      <div class="trust-item"><span class="ti">🔒</span><span class="tl">Safe<br>Delivery</span></div>
+      <div class="trust-item"><span class="ti">📲</span><span class="tl">WhatsApp<br>Orders</span></div>
+    </div>
+  </div>
+
+  <!-- Brands -->
+  <div class="brands-section">
+    <div class="section-header"><h2>🏷️ Top Brands</h2></div>
+    <div class="brands-row">
+      <div class="brand-chip">🥛 Amul</div>
+      <div class="brand-chip">🌾 Aashirvaad</div>
+      <div class="brand-chip">🍜 Nestle</div>
+      <div class="brand-chip">🫙 Fortune</div>
+      <div class="brand-chip">🍪 Parle</div>
+      <div class="brand-chip">🧴 Dettol</div>
+      <div class="brand-chip">🌶️ MDH</div>
+      <div class="brand-chip">🧺 Surf Excel</div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="land-footer">
+    <div class="footer-logo" id="footer-logo-txt">🛒 Grocery Store</div>
+    <div class="footer-addr" id="footer-addr-txt">
+      Loading address...
+    </div>
+    <button id="install-app-btn" onclick="triggerInstallPrompt()" style="display:none;background:#ffe000;color:#0c831f;border:none;border-radius:20px;padding:9px 18px;font-size:12px;font-weight:800;font-family:'Poppins',sans-serif;cursor:pointer;margin-bottom:12px;">⬇️ Install App</button>
+    <div class="footer-copy" id="footer-copy-txt">© 2026 Powered by Kirana Basket</div>
+    <div style="margin-top:8px;font-size:11px;">
+      <a href="privacy.html" style="color:rgba(255,255,255,.75);text-decoration:underline;margin:0 6px;">Privacy Policy</a>
+      <a href="terms.html" style="color:rgba(255,255,255,.75);text-decoration:underline;margin:0 6px;">Terms</a>
+      <a href="refund.html" style="color:rgba(255,255,255,.75);text-decoration:underline;margin:0 6px;">Refund Policy</a>
+    </div>
+    <div class="footer-copy" style="margin-top:4px;">Developed by <strong style="color:rgba(255,255,255,.7);">Sourabh Bongarde Software Solutions Pvt Ltd</strong></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     MAIN STORE APP
+═══════════════════════════════════════ -->
+<div id="main-app" class="app" style="display:none">
+
+  <div style="position:sticky;top:0;z-index:200;background:#fff;box-shadow:0 2px 12px rgba(0,0,0,.09)">
+    <div class="hdr-top">
+      <div class="hdr-name">
+        <h1 id="hdr-store-name">Kirana Basket 🛒</h1>
+        <p id="store-sub">📍 Belewadi Masa, Kolhapur 416218</p>
+      </div>
+      <button class="hdr-btn" onclick="requestNotificationPermission()" id="notif-btn" title="Offers ki notification pao">🔔</button>
+      <button class="hdr-btn" onclick="toggleDark()" id="dark-btn">🌙</button>
+      <button class="hdr-btn" onclick="toggleLang()" id="lang-btn" style="font-size:11px;font-weight:800;color:#fff">मर</button>
+      <button class="hdr-btn" onclick="showWishlist()">
+        ❤️<span id="wish-count" style="display:none;position:absolute;top:-4px;right:-4px;background:#ff4444;color:#fff;border-radius:10px;font-size:9px;font-weight:800;padding:1px 5px">0</span>
+      </button>
+      <button class="hdr-cart-btn" onclick="openCart()">
+        🛒<span id="cart-badge" style="display:none;background:#0c831f;color:#fff;border-radius:20px;padding:1px 8px;font-size:12px;font-weight:800">0</span>
+      </button>
+    </div>
+
+    <div class="search-bar">
+      <div class="search-inner">
+        <span style="opacity:.4;font-size:16px">🔍</span>
+        <input id="search-inp" placeholder='Search "milk", "atta", "maggi"...' oninput="onSearch()"/>
+        <button id="clear-search" onclick="clearSearch()" style="border:none;background:none;font-size:16px;color:#ccc;display:none;cursor:pointer;padding:0">✕</button>
+      </div>
+    </div>
+
+    <div id="banner-wrap" class="banner-wrap">
+      <div id="banner-slides"></div>
+      <div id="banner-dots" style="position:absolute;bottom:7px;left:50%;transform:translateX(-50%);display:flex;gap:5px;z-index:2"></div>
+    </div>
+
+    <div id="coupon-strip" class="coupon-strip">
+      <div class="c-chip">🏷 SAVE10 – 10% off</div>
+      <div class="c-chip">🏷 BONGARDE20 – ₹20 off</div>
+      <div class="c-chip">🏷 FIRST50 – ₹50 off</div>
+    </div>
+
+    <div id="cat-row" class="cat-row"></div>
+
+    <div id="sort-bar" class="sort-bar">
+      <span style="font-size:11px;color:#aaa;font-weight:600">Sort by:</span>
+      <select id="sort-sel" onchange="renderProducts()">
+        <option value="default">Default</option>
+        <option value="price_asc">Price: Low → High</option>
+        <option value="price_desc">Price: High → Low</option>
+        <option value="discount">Discount First</option>
+        <option value="name">A → Z</option>
+      </select>
+    </div>
+  </div>
+
+  <div id="recent-wrap" style="padding:12px 14px 0;display:none">
+    <div id="recent-lbl" style="font-size:12px;font-weight:800;color:#111;margin-bottom:8px">👁️ Recently Viewed</div>
+    <div id="recent-row" style="display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding-bottom:4px"></div>
+  </div>
+
+  <div style="padding:12px 12px 100px">
+    <div id="grid-title" class="sec-label">🏪 All Items</div>
+    <div id="product-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:12px"></div>
+  </div>
+
+  <div id="cart-bar" onclick="openCart()">
+    <div style="display:flex;align-items:center;gap:10px">
+      <div id="bar-count" style="background:rgba(255,255,255,.2);border-radius:8px;padding:4px 10px;font-weight:800;font-size:13px">0 items</div>
+      <span id="bar-lbl" style="font-size:13px;font-weight:600">View Cart</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:6px">
+      <span id="bar-total" style="font-weight:800;font-size:16px">₹0</span>
+      <span style="font-size:20px;opacity:.7">›</span>
+    </div>
+  </div>
+</div>
+
+<!-- CART -->
+<div id="cart-overlay" class="overlay" style="display:none" onclick="if(event.target.id==='cart-overlay')closeCart()">
+  <div class="sheet">
+    <div style="background:#0c831f;padding:16px 18px;display:flex;justify-content:space-between;align-items:center;border-radius:20px 20px 0 0;position:sticky;top:0;z-index:10">
+      <div>
+        <div id="cart-title" style="font-size:17px;font-weight:800;color:#fff">My Cart 🛒</div>
+        <div style="font-size:11px;color:rgba(255,255,255,.8)">Belewadi Masa, Kolhapur 416218</div>
+      </div>
+      <button onclick="closeCart()" style="background:rgba(255,255,255,.2);border:none;color:#fff;border-radius:10px;padding:7px 14px;font-weight:700;font-size:16px;cursor:pointer">✕</button>
+    </div>
+    <div id="cart-body" style="padding:14px;display:flex;flex-direction:column;gap:10px"></div>
+  </div>
+</div>
+
+<!-- WISHLIST -->
+<div id="wish-overlay" class="overlay" style="display:none" onclick="if(event.target.id==='wish-overlay')closeWish()">
+  <div class="sheet">
+    <div style="background:#e53935;padding:16px 18px;display:flex;justify-content:space-between;align-items:center;border-radius:20px 20px 0 0;position:sticky;top:0">
+      <div id="wish-title" style="font-size:17px;font-weight:800;color:#fff">❤️ Wishlist</div>
+      <button onclick="closeWish()" style="background:rgba(255,255,255,.2);border:none;color:#fff;border-radius:10px;padding:7px 14px;font-weight:700;font-size:16px;cursor:pointer">✕</button>
+    </div>
+    <div id="wish-body" style="padding:14px"></div>
+  </div>
+</div>
+
+<!-- RECEIPT -->
+<div id="receipt-overlay" class="modal-center" style="display:none" onclick="if(event.target.id==='receipt-overlay')closeReceiptModal()">
+  <div style="width:100%;max-width:360px;background:#fff;border-radius:20px;overflow:hidden;box-shadow:0 24px 60px rgba(0,0,0,.3);animation:fadeIn .3s ease;max-height:90vh;overflow-y:auto">
+    <div id="receipt-content"></div>
+    <div style="padding:12px 14px;display:flex;gap:8px;background:#fff;border-top:1px solid #f0f0f0">
+      <button onclick="printReceipt()" style="flex:1;background:#0c831f;color:#fff;border:none;border-radius:10px;padding:11px;font-weight:700;font-size:12px;cursor:pointer;font-family:'Poppins',sans-serif">🖨️ Print</button>
+      <button onclick="whatsappReceipt()" style="flex:1;background:#25d366;color:#fff;border:none;border-radius:10px;padding:11px;font-weight:700;font-size:12px;cursor:pointer;font-family:'Poppins',sans-serif">📲 WhatsApp</button>
+      <button onclick="closeReceiptModal()" style="flex:1;background:#f0f0f0;color:#555;border:none;border-radius:10px;padding:11px;font-weight:700;font-size:12px;cursor:pointer;font-family:'Poppins',sans-serif">Close</button>
+    </div>
+  </div>
+</div>
+
+<div id="receipt-print-area" style="display:none"></div>
+<div id="toast" class="toast"></div>
+
+<!-- ════════════════════════════
+     Firebase SDKs (all 3 loaded)
+════════════════════════════ -->
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-messaging-compat.js"></script>
+<script src="js/core/config.js"></script>
+<script src="js/core/Db.js"></script>
+<script src="js/core/notifications.js"></script>
+<script src="js/store/state.js"></script>
+<script src="js/store/ui-core.js"></script>
+<script src="js/store/banners-categories.js"></script>
+<script src="js/store/products.js"></script>
+<script src="js/store/cart.js"></script>
+<script src="js/store/checkout.js"></script>
+
+<script src="js/store/main.js"></script>
+</body>
+</html>

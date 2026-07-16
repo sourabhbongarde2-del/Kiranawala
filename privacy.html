@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Privacy Policy</title>
+<link rel="icon" href="assets/icons/icon-192.png"/>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="css/legal.css"/>
+</head>
+<body>
+<a href="index.html" class="back">← Store pe wapas jao</a>
+<h1 id="pp-store">Privacy Policy</h1>
+<div class="updated">Last updated: <span id="pp-date"></span></div>
+
+<div class="note">
+  ⚠️ Ye ek generic template hai. Store owner ise apne actual practices ke
+  hisaab se customize kar sakta hai (khaas kar agar kisi payment gateway
+  ya third-party service ka use ho raha ho).
+</div>
+
+<h2>Hum kya jaankari lete hain</h2>
+<p>Jab aap order karte ho, hum ye jaankari lete hain taaki aapka order sahi se deliver ho sake:</p>
+<ul>
+  <li>Naam aur mobile number</li>
+  <li>Delivery address / PIN code</li>
+  <li>Order details (kya kharida, kitni quantity, price)</li>
+  <li>Payment mode (COD ya UPI) — lekin hum aapke bank/UPI PIN jaise sensitive details kabhi store nahi karte</li>
+</ul>
+
+<h2>Is jaankari ka istemaal kaise hota hai</h2>
+<ul>
+  <li>Aapka order process aur deliver karne ke liye</li>
+  <li>Aapse order ke baare mein contact karne ke liye (confirmation, delivery updates)</li>
+  <li>Agar aapne notification permission di hai, to naye offers ke baare mein batane ke liye</li>
+</ul>
+
+<h2>Data kahan store hota hai</h2>
+<p>Aapki jaankari Google Firebase (Firestore) par securely store hoti hai. Sirf store ka malik apne customers ke orders dekh sakta hai — koi aur customer ye jaankari nahi dekh sakta.</p>
+
+<h2>Aapke rights</h2>
+<ul>
+  <li>Aap kabhi bhi apna data delete karne ki request kar sakte ho — store ke WhatsApp/phone number par contact karo</li>
+  <li>Aap notification permission kabhi bhi apne browser settings se band kar sakte ho</li>
+</ul>
+
+<h2>Sawal ho to</h2>
+<p>Kisi bhi privacy-related sawal ke liye, store se seedha contact karo (contact details store page par milenge).</p>
+
+<footer>© <span id="pp-year"></span> <span id="pp-store2">Kirana Basket</span></footer>
+
+<script src="js/core/config.js"></script>
+<script src="js/core/Db.js"></script>
+<script>
+(async function () {
+  await dbInit();
+  const s = (await dbLoadSettings()) || DEFAULT_SETTINGS;
+  document.getElementById("pp-store").textContent = (s.storeName || "Kirana Basket") + " — Privacy Policy";
+  document.getElementById("pp-store2").textContent = s.storeName || "Kirana Basket";
+  document.getElementById("pp-date").textContent = new Date().toLocaleDateString("en-IN", { day: "2-digit", month: "long", year: "numeric" });
+  document.getElementById("pp-year").textContent = new Date().getFullYear();
+})();
+</script>
+</body>
+</html>

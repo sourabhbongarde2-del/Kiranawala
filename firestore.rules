@@ -1,0 +1,113 @@
+rules_version = '2';
+
+/*
+  BONGARDE MART — Firestore Security Rules
+  ------------------------------------------------------------------
+  HOW TO APPLY:
+  1. Go to console.firebase.google.com → your project → Firestore
+     Database → Rules tab.
+  2. Replace everything there with this file's contents.
+  3. Click "Publish".
+
+  WHAT THIS PROTECTS:
+  - Every store's products/settings/banners are public to READ (needed so
+    customers can browse the shop) but can only be WRITTEN by the signed-in
+    owner of that specific store (matched via ownerUid, set at registration
+    by Db.js / register.html).
+  - Orders: any customer can CREATE a new order (checkout), but nobody —
+    not even the customer who placed it — can read, list, edit or delete
+    order documents except the store's own signed-in owner. This stops
+    customers from seeing each other's names/phone numbers/addresses.
+  - The public "directory" (used by nearby.html) is world-readable but only
+    writable by the store owner it belongs to.
+
+  KNOWN LIMITATION: stores created before this update (or the built-in demo
+  store) have no ownerUid yet, so they fall back to the old open-write
+  behaviour below (isLegacyUnsecuredStore) — no worse than before this
+  update, but not truly secure either. To upgrade a legacy store, re-run
+  it through register.html with a new owner login, or manually add an
+  ownerUid field (matching a real Firebase Auth user's uid) to its
+  settings document.
+*/
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function settingsOf(storeId) {
+      // NOTE: Db.js wraps every doc as { data: {...actualFields} }, so the
+      // real fields (like ownerUid) live one level deeper than you'd expect.
+      return get(/databases/$(database)/documents/stores/$(storeId)/data/settings).data.data;
+    }
+    function isOwnerOf(storeId) {
+      return request.auth != null && request.auth.uid == settingsOf(storeId).ownerUid;
+    }
+    function isLegacyUnsecuredStore(storeId) {
+      return !("ownerUid" in settingsOf(storeId));
+    }
+
+    // ── Public store directory (used by nearby.html) ──
+    match /directory/{storeId} {
+      allow read: if true;
+      allow write: if isOwnerOf(storeId) || isLegacyUnsecuredStore(storeId);
+    }
+
+    // ── Per-store settings (products/banners moved to their own
+    // collections below to avoid Firestore's 1MB-per-document limit) ──
+    match /stores/{storeId}/data/{docId} {
+      allow read: if true;
+
+      // Creating the very first "settings" doc (during registration) has
+      // no existing owner to check yet — so we instead require that the
+      // brand-new document's own ownerUid matches whoever is signed in.
+      allow create: if request.auth != null &&
+        (docId != "settings" || request.resource.data.data.ownerUid == request.auth.uid);
+
+      allow update, delete: if isOwnerOf(storeId) || isLegacyUnsecuredStore(storeId);
+    }
+
+    // ── Products & banners: one document each, so a large catalog can
+    // never hit a size limit and editing one item never risks
+    // overwriting a concurrent edit to a different item. ──
+    match /stores/{storeId}/products/{productId} {
+      allow read: if true;
+      allow write: if isOwnerOf(storeId) || isLegacyUnsecuredStore(storeId);
+    }
+    match /stores/{storeId}/banners/{bannerId} {
+      allow read: if true;
+      allow write: if isOwnerOf(storeId) || isLegacyUnsecuredStore(storeId);
+    }
+
+    // ── Orders: write-only for customers, full access for the owner ──
+    match /stores/{storeId}/orders/{orderId} {
+      allow create: if true;
+      allow read, list: if isOwnerOf(storeId) || isLegacyUnsecuredStore(storeId);
+      allow update, delete: if isOwnerOf(storeId) || isLegacyUnsecuredStore(storeId);
+    }
+
+    // ── Push notification device tokens: any customer's device can
+    // register itself, but only the store owner can list/read tokens
+    // (this collection is only ever actually read by the Cloud Function,
+    // which uses the Admin SDK and bypasses these rules entirely — this
+    // just stops OTHER customers' browsers from harvesting the list). ──
+    match /stores/{storeId}/tokens/{tokenId} {
+      allow create, update: if true;
+      allow read, list, delete: if isOwnerOf(storeId) || isLegacyUnsecuredStore(storeId);
+    }
+
+    // ── Notification outbox: only the store owner can queue a push
+    // (stops random customers from spamming notifications to everyone). ──
+    match /stores/{storeId}/notificationsOutbox/{notifId} {
+      allow create: if isOwnerOf(storeId) || isLegacyUnsecuredStore(storeId);
+      allow read, list: if isOwnerOf(storeId) || isLegacyUnsecuredStore(storeId);
+      allow update, delete: if false;
+    }
+
+    // ── Lightweight error log: any customer's browser can report an
+    // error (helps the owner spot real bugs), only the owner can read them. ──
+    match /stores/{storeId}/errorLog/{errId} {
+      allow create: if true;
+      allow read, list: if isOwnerOf(storeId) || isLegacyUnsecuredStore(storeId);
+      allow update, delete: if false;
+    }
+  }
+}

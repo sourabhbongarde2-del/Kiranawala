@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Refund & Cancellation Policy</title>
+<link rel="icon" href="assets/icons/icon-192.png"/>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="css/legal.css"/>
+</head>
+<body>
+<a href="index.html" class="back">← Store pe wapas jao</a>
+<h1 id="rf-store">Refund & Cancellation Policy</h1>
+<div class="updated">Last updated: <span id="rf-date"></span></div>
+
+<div class="note">
+  ⚠️ Ye generic template hai. Payment gateway (Razorpay/Cashfree) use karne
+  se pehle apni policy ko unke requirements ke hisaab se update karo.
+</div>
+
+<h2>Cancellation</h2>
+<ul>
+  <li>Order place hone ke turant baad (packing shuru hone se pehle) cancel kiya ja sakta hai — store ko WhatsApp/phone par batao</li>
+  <li>Ek baar order "Out for Delivery" status mein aa jaye, cancellation possible nahi hoga</li>
+</ul>
+
+<h2>Refund — COD Orders</h2>
+<p>Cash on Delivery orders mein, agar cancel ho jaye delivery se pehle, koi refund process nahi karna padta kyunki payment abhi hui hi nahi thi.</p>
+
+<h2>Refund — UPI Orders</h2>
+<ul>
+  <li>Agar aapne UPI se pay kar diya aur order cancel karna hai, store aapko usi UPI ID par 3-5 business days mein refund karega</li>
+  <li>Damaged/wrong item milne par, product wapas karke ya photo bhej ke store se refund/replacement maango</li>
+</ul>
+
+<h2>Return Policy</h2>
+<p>Perishable items (dairy, vegetables, fruits) generally return nahi hote unless damaged/expired mile. Non-perishable items delivery ke 24 ghante ke andar return ho sakte hain agar seal/packaging kharab na hui ho.</p>
+
+<h2>Contact</h2>
+<p>Refund/cancellation ke liye seedha store se WhatsApp/phone par contact karo (details store page par milenge).</p>
+
+<footer>© <span id="rf-year"></span> <span id="rf-store2">Kirana Basket</span></footer>
+
+<script src="js/core/config.js"></script>
+<script src="js/core/Db.js"></script>
+<script>
+(async function () {
+  await dbInit();
+  const s = (await dbLoadSettings()) || DEFAULT_SETTINGS;
+  document.getElementById("rf-store").textContent = (s.storeName || "Kirana Basket") + " — Refund Policy";
+  document.getElementById("rf-store2").textContent = s.storeName || "Kirana Basket";
+  document.getElementById("rf-date").textContent = new Date().toLocaleDateString("en-IN", { day: "2-digit", month: "long", year: "numeric" });
+  document.getElementById("rf-year").textContent = new Date().getFullYear();
+})();
+</script>
+</body>
+</html>

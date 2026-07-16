@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"/>
+<meta name="theme-color" content="#0c831f"/>
+<title>Nearby Kirana Stores</title>
+<link rel="icon" href="assets/icons/icon-192.png"/>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="css/nearby.css"/>
+</head>
+<body>
+
+<div class="top-nav">
+  <h1>🛒 Nearby Kirana Stores</h1>
+  <p id="nav-sub">Apne aas paas ki dukane dhoond rahe hain...</p>
+</div>
+
+<div id="content">
+  <div class="state-box" id="loading-box">
+    <div class="spin"></div>
+    <h2>Location check kar rahe hain...</h2>
+    <p>Location on karo taaki humein pata chale tumhare 3km ke andar<br>kaunsi dukane hain</p>
+  </div>
+</div>
+
+<div style="text-align:center;padding:20px 16px 30px;font-size:10px;color:#bbb">
+  Developed by <strong style="color:#888">Sourabh Bongarde Software Solutions Pvt Ltd</strong>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+<script src="js/core/config.js"></script>
+<script src="js/core/Db.js"></script>
+<script src="js/nearby/nearby.js"></script>
+</body>
+</html>
